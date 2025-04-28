@@ -91,13 +91,22 @@ def download_videos(links, output_path):
 
 st.title("📥 Shorts Bulk Downloader")
 
-# Sample Fake Ad Placeholder
+# Top Banner Ad Placeholder
 st.markdown("""
-<div style='background-color: #f9f9f9; padding: 10px; border: 1px dashed gray; text-align: center;'>
-    <b>🚀 Your Ad Could Be Here! 🚀</b><br>
-    (This space reserved for future Google Ads)
+<div style='background-color: #f9f9f9; padding: 10px; border: 2px dashed gray; text-align: center;'>
+    <b>🚀 Top Banner Ad Space 🚀</b><br>
+    (Reserved for future Google Ads)
 </div>
 """, unsafe_allow_html=True)
+
+# Sidebar Ad Placeholder
+with st.sidebar:
+    st.markdown("""
+    <div style='background-color: #e9e9e9; padding: 10px; border: 2px dashed gray; text-align: center;'>
+        <b>📢 Sidebar Ad</b><br>
+        (Sidebar Ad Placeholder)
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("Download multiple YouTube Shorts from a channel at once.")
 
@@ -137,6 +146,14 @@ if st.button("Start Download"):
                     mime="application/zip"
                 )
 
+            # Bottom Banner Ad Placeholder
+            st.markdown("""
+            <div style='background-color: #f9f9f9; padding: 10px; border: 2px dashed gray; text-align: center;'>
+                <b>📣 Bottom Banner Ad</b><br>
+                (Reserved for future Google Ads)
+            </div>
+            """, unsafe_allow_html=True)
+
             # Show failed links if any
             if failed_links:
                 st.warning(f"⚠️ {len(failed_links)} downloads failed:")
@@ -144,8 +161,6 @@ if st.button("Start Download"):
                     st.write(link)
         else:
             st.error("No shorts found or failed to extract links.")
-
-
 # ---- Footer Links ----
 st.markdown("""
 <hr style="margin-top: 50px;">
@@ -156,4 +171,3 @@ st.markdown("""
     <a href="/privacy.html" target="_blank">Privacy Policy</a>
 </div>
 """, unsafe_allow_html=True)
-
