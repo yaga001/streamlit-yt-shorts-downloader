@@ -3,8 +3,6 @@ import os
 import yt_dlp
 import shutil
 import time
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 # ---- Analytics Counter ----
 if 'visit_count' not in st.session_state:
@@ -16,24 +14,15 @@ st.sidebar.markdown(f"👥 Visitors this session: **{st.session_state.visit_coun
 # ---- Email Collection Section ----
 st.sidebar.markdown("---")
 st.sidebar.subheader("💌 Stay Updated!")
-user_email = st.sidebar.text_input("Enter your email:")
 
-if st.sidebar.button("Subscribe"):
-    if user_email:
-        try:
-            # Connect to Google Sheets
-            scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-            creds = ServiceAccountCredentials.from_json_keyfile_name("gcreds.json", scope)
-            client = gspread.authorize(creds)
-
-            sheet = client.open("ShortsSaverSubscribers").sheet1
-            sheet.append_row([user_email])
-
-            st.sidebar.success("Thank you for subscribing!")
-        except Exception as e:
-            st.sidebar.error(f"Error saving email: {e}")
-    else:
-        st.sidebar.error("Please enter a valid email address.")
+# Mailchimp or Substack Subscribe Link
+st.sidebar.markdown("""
+<div style="text-align: center;">
+    <a href="https://shortssaver.substack.com" target="_blank">
+        <button style="background-color: #4CAF50; color: white; padding: 10px 20px; margin: 10px 0; border: none; cursor: pointer;">Subscribe to Our Newsletter</button>
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
 # [Rest of your code remains unchanged until after app logic]
 
