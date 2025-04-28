@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import yt_dlp
+import shutil
 
 
 def get_short_links(channel_url):
@@ -8,6 +9,9 @@ def get_short_links(channel_url):
         'quiet': True,
         'extract_flat': True,
         'playlist_end': 100,
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        },
     }
 
     if '/@' in channel_url:
@@ -42,6 +46,9 @@ def download_videos(links, output_path):
         ydl_opts = {
             'quiet': True,
             'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s'),
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            },
         }
 
         try:
@@ -77,5 +84,16 @@ if st.button("Start Download"):
         if short_links:
             st.success(f"Found {len(short_links)} videos. Starting download...")
             download_videos(short_links, download_dir)
+
+            # Create ZIP file
+            zip_path = shutil.make_archive(download_dir, 'zip', download_dir)
+            st.success("All downloads completed!")
+            with open(zip_path, "rb") as f:
+                st.download_button(
+                    label="📦 Download All Videos as ZIP",
+                    data=f,
+                    file_name=f"{folder_name}.zip",
+                    mime="application/zip"
+                )
         else:
             st.error("No shorts found or failed to extract links.")
