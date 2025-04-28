@@ -45,7 +45,7 @@ def get_short_links(channel_url, max_links=100):
         result = ydl.extract_info(channel_url, download=False)
         if 'entries' in result:
             video_ids = [entry['id'] for entry in result['entries']]
-            return [f'https://www.youtube.com/shorts/{vid}' for vid in video_ids][:max_links]
+            return [f'https://www.youtube.com/watch?v={vid}' for vid in video_ids][:max_links]
         else:
             st.warning("No videos found.")
             return []
@@ -55,6 +55,7 @@ def download_videos(links, output_path):
     total = len(links)
     progress_bar = st.progress(0)
     status_text = st.empty()
+    start_time = time.time()
 
     for idx, link in enumerate(links, 1):
         ydl_opts = {
@@ -69,7 +70,12 @@ def download_videos(links, output_path):
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
-            status_text.success(f"✅ Downloaded {idx}/{total}: {link}")
+            elapsed = time.time() - start_time
+            avg_time_per_video = elapsed / idx
+            remaining_videos = total - idx
+            estimated_remaining = avg_time_per_video * remaining_videos
+            mins, secs = divmod(int(estimated_remaining), 60)
+            status_text.success(f"✅ {idx}/{total} downloaded. Est. time left: {mins}m {secs}s")
         except Exception as e:
             status_text.error(f"❌ Failed {idx}/{total}: {link} - {e}")
 
