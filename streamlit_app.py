@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import yt_dlp
-import subprocess
+
 
 def get_short_links(channel_url):
     ydl_opts = {
@@ -32,17 +32,29 @@ def get_short_links(channel_url):
             st.warning("No videos found.")
             return []
 
+
 def download_videos(links, output_path):
     total = len(links)
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+
     for idx, link in enumerate(links, 1):
+        ydl_opts = {
+            'quiet': True,
+            'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s'),
+        }
+
         try:
-            subprocess.run(['yt-dlp', '--quiet', '--output',
-                            os.path.join(output_path, '%(title)s.%(ext)s'),
-                            link], check=True)
-            st.info(f"Downloaded {idx}/{total}: {link}")
-        except subprocess.CalledProcessError as e:
-            st.error(f"Failed {idx}/{total}: {link} - {e}")
-        st.progress(idx / total)
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([link])
+            status_text.success(f"✅ Downloaded {idx}/{total}: {link}")
+        except Exception as e:
+            status_text.error(f"❌ Failed {idx}/{total}: {link} - {e}")
+
+        progress_bar.progress(idx / total)
+
+    status_text.info("🎉 Download process completed!")
+
 
 # ---- Streamlit UI ----
 
