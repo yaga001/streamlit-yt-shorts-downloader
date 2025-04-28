@@ -144,3 +144,16 @@ if st.button("Start Download"):
                     st.write(link)
         else:
             st.error("No shorts found or failed to extract links.")
+
+
+# ---- Footer Links ----
+st.markdown("""
+<hr style="margin-top: 50px;">
+
+<div style='text-align: center; font-size: 14px;'>
+    <a href="/about.html" target="_blank">About</a> | 
+    <a href="/contact.html" target="_blank">Contact</a> | 
+    <a href="/privacy.html" target="_blank">Privacy Policy</a>
+</div>
+""", unsafe_allow_html=True)
+
